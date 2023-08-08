@@ -11,12 +11,12 @@ const User = new Schema({
     phoneNumber: { type: String },
     country: { type: String },
     name: { type: String },
-    favorite: [{ type: ObjectId, ref: 'product' }],
+    favorite: [{ type: String, ref: 'product' }],
     cart: [{
-        product: { type: ObjectId, ref: 'product' },
+        product: { type: String, ref: 'product' },
         quantity: { type: Number }
     }],
-    status: { type: Number },
+    status: { type: Number, default: 1, },
     createAt: { type: Date, default: Date.now() }
 })
 

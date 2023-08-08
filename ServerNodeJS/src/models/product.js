@@ -7,9 +7,10 @@ const Product = new Schema({
     price: { type: Number },
     quantity: { type: Number },
     image: { type: String },
+    mass: { type: String },
     description: { type: String },
-    category: { type: ObjectId, ref: "category" },
-    status: { type: Number },
+    category: { type: String, ref: "category" },
+    status: { type: Number, default: 1 },
     createAt: { type: Date, default: Date.now() },
 })
 

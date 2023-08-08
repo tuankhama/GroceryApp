@@ -2,10 +2,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const Bill = new Schema({
-    detail: { type: String },
+    idUser: { type: String },
+    billItem: [
+        {
+            product: { type: String, ref: 'product' },
+            quantity: { type: Number }
+        }
+    ],
     address: { type: String },
     payment: { type: String },
-    status: { type: Number },
+    status: { type: Number, default: 1 },
 })
 
 
