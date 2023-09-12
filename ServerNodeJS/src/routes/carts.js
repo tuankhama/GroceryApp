@@ -38,4 +38,29 @@ router.delete('/delete/:idUser/:idProduct', async (req, res, next) => {
 
 })
 
+
+// http:localhost:3000/carts/increase/:idUser/:idProduct
+router.post('/increase/:idUser/:idProduct', async (req, res, next) => {
+    try {
+        const { idUser, idProduct } = req.params;
+        const increase = await cartService.increaseQuantity(idUser, idProduct);
+        res.status(200).json(increase);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+
+})
+
+
+// http:localhost:3000/carts/increase/:idUser/:idProduct
+router.post('/decrease/:idUser/:idProduct', async (req, res, next) => {
+    try {
+        const { idUser, idProduct } = req.params;
+        const increase = await cartService.decreaseQuantity(idUser, idProduct);
+        res.status(200).json(increase);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+
+})
 module.exports = router;

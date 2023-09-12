@@ -28,8 +28,8 @@ router.get('/detail/:idBill', async (req, res, next) => {
 // http:localhost:3000/bills/add
 router.post('/add', async (req, res, next) => {
     try {
-        const { idUser, billItem, address, payment } = req.body;
-        const addBill = await billService.addBill(idUser, billItem, address, payment);
+        const { idUser, billItem, address, payment, phone, name } = req.body;
+        const addBill = await billService.addBill(idUser, billItem, address, payment, phone, name);
         res.status(200).json(addBill);
     } catch (error) {
         res.status(400).json(error);

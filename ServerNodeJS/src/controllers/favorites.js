@@ -1,4 +1,5 @@
 const userSchema = require('../models/user')
+const productSchema = require('../models/product');
 const getFavorites = async (idUser) => {
 
     let response = {
@@ -38,7 +39,9 @@ const addFavorite = async (idUser, idProduct) => {
         }
         user.favorite.push(idProduct);
         const result = await user.save();
-        return { ...response, data: result.favorite }
+        const products = await productSchema.findById(idProduct);
+
+        return { ...response, data: products }
     } catch (error) {
         return { ...response, status: false, message: error.message }
     }
@@ -63,7 +66,7 @@ const deleteFavorite = async (idUser, idProduct) => {
         const favoriteIndex = user.favorite.indexOf(favorite)
         user.favorite.splice(favoriteIndex, 1)
         const result = await user.save();
-        return { ...response, data: result.favorite }
+        return { ...response, data: idProduct }
     } catch (error) {
         return { ...response, status: false, message: error.message }
     }

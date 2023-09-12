@@ -11,9 +11,16 @@ const User = new Schema({
     phoneNumber: { type: String },
     country: { type: String },
     name: { type: String },
+    address: [{
+        _id: { type: Number },
+        name: { type: String },
+        phone: { type: String },
+        address: { type: String },
+        detailAddress: { type: String },
+    }],
     favorite: [{ type: String, ref: 'product' }],
     cart: [{
-        product: { type: String, ref: 'product' },
+        product: { type: Object },
         quantity: { type: Number }
     }],
     status: { type: Number, default: 1, },

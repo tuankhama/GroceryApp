@@ -1,3 +1,4 @@
+const productSchema = require("../models/product");
 const userSchema = require("../models/user");
 
 const getCarts = async (idUser) => {
@@ -8,7 +9,7 @@ const getCarts = async (idUser) => {
         data: null,
     }
     try {
-        const user = await userSchema.findById(idUser).populate('cart.product', 'name image mass');
+        const user = await userSchema.findById(idUser)
         if (!user) {
             throw new Error("User not found")
         }
@@ -31,20 +32,21 @@ const addCart = async (idUser, idProduct, quantity) => {
         if (!user) {
             throw new Error("User not found")
         }
-        const cartItem = user.cart.find((item) => item.product === idProduct)
-
+        const products = await productSchema.findById(idProduct, "name image mass price");
+        const cartItem = user.cart.find((item) => item.product._id == idProduct)
         if (quantity) {
-            console.log("quantity: " + quantity);
             if (cartItem) {
                 const updateQuantity = cartItem.quantity += Number(quantity);
                 await user.save();
                 return { ...response, data: cartItem, message: "Increase quantity : " + updateQuantity }
             }
             const cartObj = {
-                product: idProduct,
+                product: products,
                 quantity: Number(quantity),
             }
             user.cart.push(cartObj);
+            await user.save();
+            return { ...response, data: cartObj }
         }
         else {
             if (cartItem) {
@@ -53,14 +55,16 @@ const addCart = async (idUser, idProduct, quantity) => {
                 return { ...response, data: cartItem, message: "Increase quantity : " + updateQuantity }
             }
             const cartObj = {
-                product: idProduct,
+                product: products,
                 quantity: 1,
             }
             user.cart.push(cartObj);
-
+            await user.save();
+            return { ...response, data: cartObj }
         }
-        await user.save();
-        return { ...response, data: user.cart }
+
+
+
     } catch (error) {
         return { ...response, status: false, message: error.message }
     }
@@ -70,7 +74,7 @@ const addCart = async (idUser, idProduct, quantity) => {
 const removeCart = async (idUser, idProduct) => {
     let response = {
         status: true,
-        message: "Xóa sản phẩm gio hang thành công",
+        message: "Xóa sản phẩm giỏ h thành công",
         data: null,
     }
     try {
@@ -78,7 +82,8 @@ const removeCart = async (idUser, idProduct) => {
         if (!user) {
             throw new Error("User not found")
         }
-        const cartItem = user.cart.find((item) => item.product === idProduct)
+        const cartItem = user.cart.find((item) => item.product._id == idProduct)
+        console.log(cartItem);
         if (!cartItem) {
             throw new Error("Product cart not found")
         }
@@ -91,6 +96,57 @@ const removeCart = async (idUser, idProduct) => {
     }
 }
 
+
+
+
+
+const increaseQuantity = async (idUser, idProduct) => {
+    let response = {
+        status: true,
+        message: "Tang so luong thanh cong thành công",
+        data: null,
+    }
+    try {
+        const user = await userSchema.findById(idUser);
+        if (!user) {
+            throw new Error("User not found")
+        }
+        const cartItem = user.cart.find((item) => item.product._id == idProduct)
+        if (!cartItem) {
+            throw new Error("Product cart not found")
+        }
+        const result = cartItem.quantity += 1;
+        await user.save();
+        return { ...response, data: result }
+    } catch (error) {
+        return { ...response, status: false, message: error.message }
+    }
+}
+
+
+const decreaseQuantity = async (idUser, idProduct) => {
+    let response = {
+        status: true,
+        message: "Giam so luong thanh cong thành công",
+        data: null,
+    }
+    try {
+        const user = await userSchema.findById(idUser);
+        if (!user) {
+            throw new Error("User not found")
+        }
+        const cartItem = user.cart.find((item) => item.product._id == idProduct)
+        if (!cartItem) {
+            throw new Error("Product cart not found")
+        }
+        const result = cartItem.quantity -= 1;
+        await user.save();
+        return { ...response, data: result }
+    } catch (error) {
+        return { ...response, status: false, message: error.message }
+    }
+}
+
 module.exports = {
-    getCarts, addCart, removeCart
+    getCarts, addCart, removeCart, increaseQuantity, decreaseQuantity
 }

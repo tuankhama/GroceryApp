@@ -41,8 +41,7 @@ const getBillDetail = async (idBill) => {
 // status = 1 : da dat hang,
 // status = 2 : da xac nhan,
 // status = 3 : da giao hang,
-
-const addBill = async (idUser, billItem, address, payment) => {
+const addBill = async (idUser, billItem, address, payment, phone, name) => {
     let response = {
         status: true,
         message: "Insert bill thanh cong",
@@ -50,12 +49,21 @@ const addBill = async (idUser, billItem, address, payment) => {
     }
     try {
         const cartItem = await userSchema.findById(idUser)
+        const lastBill = await billSchema.findOne().sort({ _id: -1 });
+        let lastNumber = 1;
+        if (lastBill) {
+            // Lấy số đơn hàng cuối cùng và tăng nó lên 1
+            lastNumber = lastBill.nameBill + 1;
+        }
         const billItem = cartItem.cart;
         const bill = await new billSchema({
             idUser: idUser,
             billItem: billItem,
             address: address,
             payment: payment,
+            phone: phone,
+            name: name,
+            nameBill: lastNumber,
         })
         // cap nhat so luong san pham trong product
         for (const item of cartItem.cart) {

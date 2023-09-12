@@ -22,4 +22,17 @@ router.get('/getbycate/:idCate', async (req, res, next) => {
         res.status(400).json(error);
     }
 })
+
+// http:localhost:3000/products/detail/:idProduct
+router.get('/detail/:idProduct', async (req, res, next) => {
+    try {
+        const idProduct = req.params.idProduct;
+        const fetchProducts = await productController.getDetailProduct(idProduct);
+        res.status(200).json(fetchProducts);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+})
+
+
 module.exports = router;

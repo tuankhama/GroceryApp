@@ -5,13 +5,17 @@ const Bill = new Schema({
     idUser: { type: String },
     billItem: [
         {
-            product: { type: String, ref: 'product' },
+            product: { type: Object },
             quantity: { type: Number }
         }
     ],
     address: { type: String },
+    phone: { type: String },
+    name: { type: String },
     payment: { type: String },
     status: { type: Number, default: 1 },
+    nameBill: { type: Number },
+    createAt: { type: Date, default: Date.now() }
 })
 
 

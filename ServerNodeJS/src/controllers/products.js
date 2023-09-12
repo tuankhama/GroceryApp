@@ -35,6 +35,24 @@ const getProductByIdCate = async (idCate) => {
     }
 }
 
+const getDetailProduct = async (idProduct) => {
+    try {
+        const products = await productSchema.findById(idProduct);
+        return {
+            status: true,
+            message: "Lấy detail thành công",
+            data: products
+        }
+    } catch (error) {
+        return {
+            status: true,
+            message: "Lấy detail thất bại",
+            data: null,
+        }
+    }
+}
+
+
 
 const updateQuantity = async (idProduct, quantity) => {
     try {
@@ -47,5 +65,5 @@ const updateQuantity = async (idProduct, quantity) => {
 }
 
 module.exports = {
-    getAllProduct, getProductByIdCate, updateQuantity
+    getAllProduct, getProductByIdCate, updateQuantity, getDetailProduct
 }
